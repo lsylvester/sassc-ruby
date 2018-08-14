@@ -234,11 +234,11 @@ module SassC
       end
 
       def returns_a_bool
-        return Sass::Script::Value::Bool.new(true)
+        return SassC::Script::Value::Bool.new(true)
       end
 
       def inspect_bool ( argument )
-        raise StandardError.new "passed value is not a Sass::Script::Value::Bool" unless argument.is_a? Sass::Script::Value::Bool
+        raise StandardError.new "passed value is not a SassC::Script::Value::Bool" unless argument.is_a? SassC::Script::Value::Bool
         return argument
       end
 

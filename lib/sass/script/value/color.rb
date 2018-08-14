@@ -388,14 +388,14 @@ module Sass::Script::Value
     end
 
     # The SassScript `==` operation.
-    # **Note that this returns a {Sass::Script::Value::Bool} object,
+    # **Note that this returns a {SassC::Script::Value::Bool} object,
     # not a Ruby boolean**.
     #
     # @param other [Value] The right-hand side of the operator
     # @return [Bool] True if this value is the same as the other,
     #   false otherwise
     def eq(other)
-      Sass::Script::Value::Bool.new(
+      SassC::Script::Value::Bool.new(
         other.is_a?(Color) && rgb == other.rgb && alpha == other.alpha)
     end
 

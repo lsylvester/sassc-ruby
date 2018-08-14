@@ -38,7 +38,7 @@ module Sass::Script::Value
 
     # @see Value#eq
     def eq(other)
-      Sass::Script::Value::Bool.new(
+      SassC::Script::Value::Bool.new(
         other.is_a?(List) && value == other.value &&
         separator == other.separator && bracketed == other.bracketed)
     end

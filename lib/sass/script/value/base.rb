@@ -49,36 +49,36 @@ MSG
     end
 
     # The SassScript `==` operation.
-    # **Note that this returns a {Sass::Script::Value::Bool} object,
+    # **Note that this returns a {SassC::Script::Value::Bool} object,
     # not a Ruby boolean**.
     #
     # @param other [Value] The right-hand side of the operator
-    # @return [Sass::Script::Value::Bool] True if this value is the same as the other,
+    # @return [SassC::Script::Value::Bool] True if this value is the same as the other,
     #   false otherwise
     def eq(other)
-      Sass::Script::Value::Bool.new(self.class == other.class && value == other.value)
+      SassC::Script::Value::Bool.new(self.class == other.class && value == other.value)
     end
 
     # The SassScript `!=` operation.
-    # **Note that this returns a {Sass::Script::Value::Bool} object,
+    # **Note that this returns a {SassC::Script::Value::Bool} object,
     # not a Ruby boolean**.
     #
     # @param other [Value] The right-hand side of the operator
-    # @return [Sass::Script::Value::Bool] False if this value is the same as the other,
+    # @return [SassC::Script::Value::Bool] False if this value is the same as the other,
     #   true otherwise
     def neq(other)
-      Sass::Script::Value::Bool.new(!eq(other).to_bool)
+      SassC::Script::Value::Bool.new(!eq(other).to_bool)
     end
 
     # The SassScript `==` operation.
-    # **Note that this returns a {Sass::Script::Value::Bool} object,
+    # **Note that this returns a {SassC::Script::Value::Bool} object,
     # not a Ruby boolean**.
     #
     # @param other [Value] The right-hand side of the operator
-    # @return [Sass::Script::Value::Bool] True if this value is the same as the other,
+    # @return [SassC::Script::Value::Bool] True if this value is the same as the other,
     #   false otherwise
     def unary_not
-      Sass::Script::Value::Bool.new(!to_bool)
+      SassC::Script::Value::Bool.new(!to_bool)
     end
 
     # The SassScript `=` operation

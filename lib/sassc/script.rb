@@ -37,12 +37,11 @@ end
 require 'sass/script/value/base'
 require 'sassc/script/value/string'
 require 'sass/script/value/color'
-require 'sass/script/value/bool'
+require 'sassc/script/value/bool'
 
 SassC::Script::String = SassC::Script::Value::String
 
 SassC::Script::Color = Sass::Script::Value::Color
 SassC::Script::Value::Color = Sass::Script::Value::Color
 
-SassC::Script::Bool = Sass::Script::Value::Bool
-SassC::Script::Value::Bool = Sass::Script::Value::Bool
+SassC::Script::Bool = SassC::Script::Value::Bool
