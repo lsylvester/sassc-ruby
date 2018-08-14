@@ -1,5 +1,4 @@
 require 'pathname'
-require 'sass/error'
 
 module SassC
   class BaseError < StandardError; end
