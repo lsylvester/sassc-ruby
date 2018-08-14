@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-module Sass::Script::Value
+module SassC::Script::Value
   # A SassScript object representing a CSS string *or* a CSS identifier.
-  class String < Base
+  class String < Sass::Script::Value::Base
     @@interpolation_deprecation = Sass::Deprecation.new
 
     # The Ruby value of the string.
@@ -89,12 +89,12 @@ module Sass::Script::Value
 
     # @see Value#plus
     def plus(other)
-      other_value = if other.is_a?(Sass::Script::Value::String)
+      other_value = if other.is_a?(SassC::Script::Value::String)
                       other.value
                     else
                       other.to_s(:quote => :none)
                     end
-      Sass::Script::Value::String.new(value + other_value, type)
+      SassC::Script::Value::String.new(value + other_value, type)
     end
 
     # @see Value#to_s

@@ -88,7 +88,7 @@ MSG
     # @return [Script::Value::String] A string containing both values
     #   separated by `"="`
     def single_eq(other)
-      Sass::Script::Value::String.new("#{self}=#{other}")
+      SassC::Script::Value::String.new("#{self}=#{other}")
     end
 
     # The SassScript `+` operation.
@@ -97,8 +97,8 @@ MSG
     # @return [Script::Value::String] A string containing both values
     #   without any separation
     def plus(other)
-      type = other.is_a?(Sass::Script::Value::String) ? other.type : :identifier
-      Sass::Script::Value::String.new(to_s(:quote => :none) + other.to_s(:quote => :none), type)
+      type = other.is_a?(SassC::Script::Value::String) ? other.type : :identifier
+      SassC::Script::Value::String.new(to_s(:quote => :none) + other.to_s(:quote => :none), type)
     end
 
     # The SassScript `-` operation.
@@ -107,7 +107,7 @@ MSG
     # @return [Script::Value::String] A string containing both values
     #   separated by `"-"`
     def minus(other)
-      Sass::Script::Value::String.new("#{self}-#{other}")
+      SassC::Script::Value::String.new("#{self}-#{other}")
     end
 
     # The SassScript `/` operation.
@@ -116,7 +116,7 @@ MSG
     # @return [Script::Value::String] A string containing both values
     #   separated by `"/"`
     def div(other)
-      Sass::Script::Value::String.new("#{self}/#{other}")
+      SassC::Script::Value::String.new("#{self}/#{other}")
     end
 
     # The SassScript unary `+` operation (e.g. `+$a`).
@@ -125,7 +125,7 @@ MSG
     # @return [Script::Value::String] A string containing the value
     #   preceded by `"+"`
     def unary_plus
-      Sass::Script::Value::String.new("+#{self}")
+      SassC::Script::Value::String.new("+#{self}")
     end
 
     # The SassScript unary `-` operation (e.g. `-$a`).
@@ -134,7 +134,7 @@ MSG
     # @return [Script::Value::String] A string containing the value
     #   preceded by `"-"`
     def unary_minus
-      Sass::Script::Value::String.new("-#{self}")
+      SassC::Script::Value::String.new("-#{self}")
     end
 
     # The SassScript unary `/` operation (e.g. `/$a`).
@@ -143,7 +143,7 @@ MSG
     # @return [Script::Value::String] A string containing the value
     #   preceded by `"/"`
     def unary_div
-      Sass::Script::Value::String.new("/#{self}")
+      SassC::Script::Value::String.new("/#{self}")
     end
 
     # Returns the hash code of this value. Two objects' hash codes should be

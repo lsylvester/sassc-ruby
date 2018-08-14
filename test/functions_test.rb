@@ -249,11 +249,11 @@ module SassC
 
       def inspect_map ( argument )
         argument.to_h.each_pair do |key, value|
-          raise StandardError.new "key #{key.inspect} is not a string" unless key.is_a? Sass::Script::Value::String
+          raise StandardError.new "key #{key.inspect} is not a string" unless key.is_a? SassC::Script::Value::String
 
           valueClass = case key.value
                          when 'string'
-                           Sass::Script::Value::String
+                           SassC::Script::Value::String
                          when 'number'
                            Sass::Script::Value::Number
                          when 'color'

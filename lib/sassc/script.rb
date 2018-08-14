@@ -35,12 +35,11 @@ rescue LoadError
 end
 
 require 'sass/script/value/base'
-require 'sass/script/value/string'
+require 'sassc/script/value/string'
 require 'sass/script/value/color'
 require 'sass/script/value/bool'
 
-SassC::Script::String = Sass::Script::Value::String
-SassC::Script::Value::String = Sass::Script::Value::String
+SassC::Script::String = SassC::Script::Value::String
 
 SassC::Script::Color = Sass::Script::Value::Color
 SassC::Script::Value::Color = Sass::Script::Value::Color
