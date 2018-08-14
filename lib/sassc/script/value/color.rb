@@ -271,26 +271,6 @@ module SassC::Script::Value
       @attrs[:alpha] = SassC::Util.restrict(@attrs[:alpha], 0..1)
     end
 
-    # Create a new color from a valid CSS hex string.
-    #
-    # The leading hash is optional.
-    #
-    # @return [Color]
-    def self.from_hex(hex_string, alpha = nil)
-      unless hex_string =~ /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i ||
-             hex_string =~ /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i
-        raise ArgumentError.new("#{hex_string.inspect} is not a valid hex color.")
-      end
-      red   = $1.ljust(2, $1).to_i(16)
-      green = $2.ljust(2, $2).to_i(16)
-      blue  = $3.ljust(2, $3).to_i(16)
-
-      hex_string = "##{hex_string}" unless hex_string[0] == ?#
-      attrs = {:red => red, :green => green, :blue => blue, :representation => hex_string}
-      attrs[:alpha] = alpha if alpha
-      new(attrs)
-    end
-
     # The red component of the color.
     #
     # @return [Integer]
@@ -315,30 +295,6 @@ module SassC::Script::Value
       @attrs[:blue]
     end
 
-    # The hue component of the color.
-    #
-    # @return [Numeric]
-    def hue
-      rgb_to_hsl!
-      @attrs[:hue]
-    end
-
-    # The saturation component of the color.
-    #
-    # @return [Numeric]
-    def saturation
-      rgb_to_hsl!
-      @attrs[:saturation]
-    end
-
-    # The lightness component of the color.
-    #
-    # @return [Numeric]
-    def lightness
-      rgb_to_hsl!
-      @attrs[:lightness]
-    end
-
     # The alpha channel (opacity) of the color.
     # This is 1 unless otherwise defined.
     #
@@ -347,212 +303,12 @@ module SassC::Script::Value
       @attrs[:alpha].to_f
     end
 
-    # Returns whether this color object is translucent;
-    # that is, whether the alpha channel is non-1.
-    #
-    # @return [Boolean]
-    def alpha?
-      alpha < 1
-    end
-
-    # Returns the red, green, and blue components of the color.
-    #
-    # @return [Array<Integer>] A frozen three-element array of the red, green, and blue
-    #   values (respectively) of the color
-    def rgb
-      [red, green, blue].freeze
-    end
-
     # Returns the red, green, blue, and alpha components of the color.
     #
     # @return [Array<Integer>] A frozen four-element array of the red, green,
     #   blue, and alpha values (respectively) of the color
     def rgba
       [red, green, blue, alpha].freeze
-    end
-
-    # Returns the hue, saturation, and lightness components of the color.
-    #
-    # @return [Array<Integer>] A frozen three-element array of the
-    #   hue, saturation, and lightness values (respectively) of the color
-    def hsl
-      [hue, saturation, lightness].freeze
-    end
-
-    # Returns the hue, saturation, lightness, and alpha components of the color.
-    #
-    # @return [Array<Integer>] A frozen four-element array of the hue,
-    #   saturation, lightness, and alpha values (respectively) of the color
-    def hsla
-      [hue, saturation, lightness, alpha].freeze
-    end
-
-    # The SassScript `==` operation.
-    # **Note that this returns a {SassC::Script::Value::Bool} object,
-    # not a Ruby boolean**.
-    #
-    # @param other [Value] The right-hand side of the operator
-    # @return [Bool] True if this value is the same as the other,
-    #   false otherwise
-    def eq(other)
-      SassC::Script::Value::Bool.new(
-        other.is_a?(Color) && rgb == other.rgb && alpha == other.alpha)
-    end
-
-    def hash
-      [rgb, alpha].hash
-    end
-
-    # Returns a copy of this color with one or more channels changed.
-    # RGB or HSL colors may be changed, but not both at once.
-    #
-    # For example:
-    #
-    #     Color.new([10, 20, 30]).with(:blue => 40)
-    #       #=> rgb(10, 40, 30)
-    #     Color.new([126, 126, 126]).with(:red => 0, :green => 255)
-    #       #=> rgb(0, 255, 126)
-    #     Color.new([255, 0, 127]).with(:saturation => 60)
-    #       #=> rgb(204, 51, 127)
-    #     Color.new([1, 2, 3]).with(:alpha => 0.4)
-    #       #=> rgba(1, 2, 3, 0.4)
-    #
-    # @param attrs [{Symbol => Numeric}]
-    #   A map of channel names (`:red`, `:green`, `:blue`,
-    #   `:hue`, `:saturation`, `:lightness`, or `:alpha`) to values
-    # @return [Color] The new Color object
-    # @raise [ArgumentError] if both RGB and HSL keys are specified
-    def with(attrs)
-      attrs = attrs.reject {|_k, v| v.nil?}
-      hsl = !([:hue, :saturation, :lightness] & attrs.keys).empty?
-      rgb = !([:red, :green, :blue] & attrs.keys).empty?
-      if hsl && rgb
-        raise ArgumentError.new("Cannot specify HSL and RGB values for a color at the same time")
-      end
-
-      if hsl
-        [:hue, :saturation, :lightness].each {|k| attrs[k] ||= send(k)}
-      elsif rgb
-        [:red, :green, :blue].each {|k| attrs[k] ||= send(k)}
-      else
-        # If we're just changing the alpha channel,
-        # keep all the HSL/RGB stuff we've calculated
-        attrs = @attrs.merge(attrs)
-      end
-      attrs[:alpha] ||= alpha
-
-      Color.new(attrs, nil, :allow_both_rgb_and_hsl)
-    end
-
-    # The SassScript `+` operation.
-    # Its functionality depends on the type of its argument:
-    #
-    # {Number}
-    # : Adds the number to each of the RGB color channels.
-    #
-    # {Color}
-    # : Adds each of the RGB color channels together.
-    #
-    # {Value}
-    # : See {Value::Base#plus}.
-    #
-    # @param other [Value] The right-hand side of the operator
-    # @return [Color] The resulting color
-    # @raise [Sass::SyntaxError] if `other` is a number with units
-    def plus(other)
-      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
-        piecewise(other, :+)
-      else
-        super
-      end
-    end
-
-    # The SassScript `-` operation.
-    # Its functionality depends on the type of its argument:
-    #
-    # {Number}
-    # : Subtracts the number from each of the RGB color channels.
-    #
-    # {Color}
-    # : Subtracts each of the other color's RGB color channels from this color's.
-    #
-    # {Value}
-    # : See {Value::Base#minus}.
-    #
-    # @param other [Value] The right-hand side of the operator
-    # @return [Color] The resulting color
-    # @raise [Sass::SyntaxError] if `other` is a number with units
-    def minus(other)
-      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
-        piecewise(other, :-)
-      else
-        super
-      end
-    end
-
-    # The SassScript `*` operation.
-    # Its functionality depends on the type of its argument:
-    #
-    # {Number}
-    # : Multiplies the number by each of the RGB color channels.
-    #
-    # {Color}
-    # : Multiplies each of the RGB color channels together.
-    #
-    # @param other [Number, Color] The right-hand side of the operator
-    # @return [Color] The resulting color
-    # @raise [Sass::SyntaxError] if `other` is a number with units
-    def times(other)
-      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
-        piecewise(other, :*)
-      else
-        raise NoMethodError.new(nil, :times)
-      end
-    end
-
-    # The SassScript `/` operation.
-    # Its functionality depends on the type of its argument:
-    #
-    # {Number}
-    # : Divides each of the RGB color channels by the number.
-    #
-    # {Color}
-    # : Divides each of this color's RGB color channels by the other color's.
-    #
-    # {Value}
-    # : See {Value::Base#div}.
-    #
-    # @param other [Value] The right-hand side of the operator
-    # @return [Color] The resulting color
-    # @raise [Sass::SyntaxError] if `other` is a number with units
-    def div(other)
-      if other.is_a?(SassC::Script::Value::Number) ||
-          other.is_a?(SassC::Script::Value::Color)
-        piecewise(other, :/)
-      else
-        super
-      end
-    end
-
-    # The SassScript `%` operation.
-    # Its functionality depends on the type of its argument:
-    #
-    # {Number}
-    # : Takes each of the RGB color channels module the number.
-    #
-    # {Color}
-    # : Takes each of this color's RGB color channels modulo the other color's.
-    #
-    # @param other [Number, Color] The right-hand side of the operator
-    # @return [Color] The resulting color
-    # @raise [Sass::SyntaxError] if `other` is a number with units
-    def mod(other)
-      if other.is_a?(SassC::Script::Value::Number) ||
-          other.is_a?(SassC::Script::Value::Color)
-        piecewise(other, :%)
-      else
-        raise NoMethodError.new(nil, :mod)
-      end
     end
 
     # Returns a string representation of the color.
@@ -573,12 +329,6 @@ module SassC::Script::Value
     end
     alias_method :to_sass, :to_s
 
-    # Returns a string representation of the color.
-    #
-    # @return [String] The hex value
-    def inspect
-      alpha? ? rgba_str : hex_str
-    end
 
     # Returns the color's name, if it has one.
     #
@@ -588,58 +338,6 @@ module SassC::Script::Value
     end
 
     private
-
-    def smallest
-      small_explicit_str = alpha? ? rgba_str : hex_str.gsub(/^#(.)\1(.)\2(.)\3$/, '#\1\2\3')
-      [representation, COLOR_NAMES_REVERSE[rgba], small_explicit_str].
-          compact.min_by {|str| str.size}
-    end
-
-    def rgba_str
-      split = options[:style] == :compressed ? ',' : ', '
-      "rgba(#{rgb.join(split)}#{split}#{Number.round(alpha)})"
-    end
-
-    def hex_str
-      red, green, blue = rgb.map {|num| num.to_s(16).rjust(2, '0')}
-      "##{red}#{green}#{blue}"
-    end
-
-    def operation_name(operation)
-      case operation
-      when :+
-        "add"
-      when :-
-        "subtract"
-      when :*
-        "multiply"
-      when :/
-        "divide"
-      when :%
-        "modulo"
-      end
-    end
-
-    def piecewise(other, operation)
-      other_num = other.is_a? Number
-      if other_num && !other.unitless?
-        raise Sass::SyntaxError.new(
-          "Cannot #{operation_name(operation)} a number with units (#{other}) to a color (#{self})."
-        )
-      end
-
-      result = []
-      (0...3).each do |i|
-        res = rgb[i].to_f.send(operation, other_num ? other.value : other.rgb[i])
-        result[i] = [[res, 255].min, 0].max
-      end
-
-      if !other_num && other.alpha != alpha
-        raise Sass::SyntaxError.new("Alpha channels must be equal: #{self} #{operation} #{other}")
-      end
-
-      with(:red => result[0], :green => result[1], :blue => result[2])
-    end
 
     def hsl_to_rgb!
       return if @attrs[:red] && @attrs[:blue] && @attrs[:green]
@@ -656,48 +354,6 @@ module SassC::Script::Value
         hue_to_rgb(m1, m2, h),
         hue_to_rgb(m1, m2, h - 1.0 / 3)
       ].map {|c| SassC::Util.round(c * 0xff)}
-    end
-
-    def hue_to_rgb(m1, m2, h)
-      h += 1 if h < 0
-      h -= 1 if h > 1
-      return m1 + (m2 - m1) * h * 6 if h * 6 < 1
-      return m2 if h * 2 < 1
-      return m1 + (m2 - m1) * (2.0 / 3 - h) * 6 if h * 3 < 2
-      m1
-    end
-
-    def rgb_to_hsl!
-      return if @attrs[:hue] && @attrs[:saturation] && @attrs[:lightness]
-      r, g, b = [:red, :green, :blue].map {|k| @attrs[k] / 255.0}
-
-      # Algorithm from http://en.wikipedia.org/wiki/HSL_and_HSV#Conversion_from_RGB_to_HSL_or_HSV
-      max = [r, g, b].max
-      min = [r, g, b].min
-      d = max - min
-
-      h =
-        case max
-        when min; 0
-        when r; 60 * (g - b) / d
-        when g; 60 * (b - r) / d + 120
-        when b; 60 * (r - g) / d + 240
-        end
-
-      l = (max + min) / 2.0
-
-      s =
-        if max == min
-          0
-        elsif l < 0.5
-          d / (2 * l)
-        else
-          d / (2 - 2 * l)
-        end
-
-      @attrs[:hue] = h % 360
-      @attrs[:saturation] = s * 100
-      @attrs[:lightness] = l * 100
     end
   end
 end

@@ -2,12 +2,6 @@
 module SassC::Script::Value
   # A SassScript object representing a CSS string *or* a CSS identifier.
   class String < Base
-    @@interpolation_deprecation = SassC::Deprecation.new
-
-    # The Ruby value of the string.
-    #
-    # @return [String]
-    attr_reader :value
 
     # Whether this is a CSS string or a CSS identifier.
     # The difference is that strings are written with double-quotes,
@@ -16,19 +10,6 @@ module SassC::Script::Value
     # @return [Symbol] `:string` or `:identifier`
     attr_reader :type
 
-    def self.value(contents)
-      contents.gsub("\\\n", "").gsub(/\\(?:([0-9a-fA-F]{1,6})\s?|(.))/) do
-        next $2 if $2
-        # Handle unicode escapes as per CSS Syntax Level 3 section 4.3.8.
-        code_point = $1.to_i(16)
-        if code_point == 0 || code_point > 0x10FFFF ||
-            (code_point >= 0xD800 && code_point <= 0xDFFF)
-          '�'
-        else
-          [code_point].pack("U")
-        end
-      end
-    end
 
     # Returns the quoted string representation of `contents`.
     #
@@ -87,52 +68,10 @@ module SassC::Script::Value
       @deprecated_interp_equivalent = deprecated_interp_equivalent
     end
 
-    # @see Value#plus
-    def plus(other)
-      other_value = if other.is_a?(SassC::Script::Value::String)
-                      other.value
-                    else
-                      other.to_s(:quote => :none)
-                    end
-      SassC::Script::Value::String.new(value + other_value, type)
-    end
-
     # @see Value#to_s
     def to_s(opts = {})
       return @value.gsub(/\n\s*/, ' ') if opts[:quote] == :none || @type == :identifier
       String.quote(value, opts)
-    end
-
-    # @see Value#to_sass
-    def to_sass(opts = {})
-      to_s(opts.merge(:sass => true))
-    end
-
-    def separator
-      check_deprecated_interp
-      super
-    end
-
-    def to_a
-      check_deprecated_interp
-      super
-    end
-
-    # Prints a warning if this string was created using potentially-deprecated
-    # interpolation.
-    def check_deprecated_interp
-      return unless @deprecated_interp_equivalent
-
-      @@interpolation_deprecation.warn(source_range.file, source_range.start_pos.line, <<WARNING)
-\#{} interpolation near operators will be simplified in a future version of Sass.
-To preserve the current behavior, use quotes:
-
-  #{@deprecated_interp_equivalent}
-WARNING
-    end
-
-    def inspect
-      String.quote(value)
     end
   end
 end
