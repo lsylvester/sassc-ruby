@@ -131,7 +131,7 @@ module Sass
       # If the number is within epsilon of X.5, round up (or down for negative
       # numbers).
       mod = value % 1
-      mod_is_half = (mod - 0.5).abs < Script::Value::Number.epsilon
+      mod_is_half = (mod - 0.5).abs < SassC::Script::Value::Number.epsilon
       if value > 0
         !mod_is_half && mod < 0.5 ? value.floor : value.ceil
       else
@@ -344,14 +344,14 @@ module Sass
     #
     # @param name [String] The name of the value. Used in the error message.
     # @param range [Range] The allowed range of values.
-    # @param value [Numeric, Sass::Script::Value::Number] The value to check.
+    # @param value [Numeric, SassC::Script::Value::Number] The value to check.
     # @param unit [String] The unit of the value. Used in error reporting.
     # @return [Numeric] `value` adjusted to fall within range, if it
     #   was outside by a floating-point margin.
     def check_range(name, range, value, unit = '')
       grace = (-0.00001..0.00001)
       str = value.to_s
-      value = value.value if value.is_a?(Sass::Script::Value::Number)
+      value = value.value if value.is_a?(SassC::Script::Value::Number)
       return value if range.include?(value)
       return range.first if grace.include?(value - range.first)
       return range.last if grace.include?(value - range.last)

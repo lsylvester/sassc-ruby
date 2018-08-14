@@ -98,7 +98,7 @@ module Sass::Script::Value
     # @private
     #
     # @param list [Sass::Script::Value::List] The list for which the index should be checked.
-    # @param n [Sass::Script::Value::Number] The index being checked.
+    # @param n [SassC::Script::Value::Number] The index being checked.
     def self.assert_valid_index(list, n)
       if !n.int? || n.to_i == 0
         raise ArgumentError.new("List index #{n} must be a non-zero integer")

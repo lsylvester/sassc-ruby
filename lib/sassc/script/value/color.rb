@@ -460,7 +460,7 @@ module SassC::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def plus(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
+      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :+)
       else
         super
@@ -483,7 +483,7 @@ module SassC::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def minus(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
+      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :-)
       else
         super
@@ -503,7 +503,7 @@ module SassC::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def times(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
+      if other.is_a?(SassC::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :*)
       else
         raise NoMethodError.new(nil, :times)
@@ -526,7 +526,7 @@ module SassC::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def div(other)
-      if other.is_a?(Sass::Script::Value::Number) ||
+      if other.is_a?(SassC::Script::Value::Number) ||
           other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :/)
       else
@@ -547,7 +547,7 @@ module SassC::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def mod(other)
-      if other.is_a?(Sass::Script::Value::Number) ||
+      if other.is_a?(SassC::Script::Value::Number) ||
           other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :%)
       else
@@ -567,7 +567,7 @@ module SassC::Script::Value
       # IE10 doesn't properly support the color name "transparent", so we emit
       # generated transparent colors as rgba(0, 0, 0, 0) in favor of that. See
       # #1782.
-      return rgba_str if Sass::Script::Value::Number.basically_equal?(alpha, 0)
+      return rgba_str if SassC::Script::Value::Number.basically_equal?(alpha, 0)
       return name if name
       alpha? ? rgba_str : hex_str
     end

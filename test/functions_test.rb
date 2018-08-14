@@ -230,7 +230,7 @@ module SassC
       end
 
       def returns_a_number
-        return Sass::Script::Value::Number.new(-312,'rem')
+        return SassC::Script::Value::Number.new(-312,'rem')
       end
 
       def returns_a_bool
@@ -243,7 +243,7 @@ module SassC
       end
 
       def inspect_number ( argument )
-        raise StandardError.new "passed value is not a Sass::Script::Value::Number" unless argument.is_a? Sass::Script::Value::Number
+        raise StandardError.new "passed value is not a SassC::Script::Value::Number" unless argument.is_a? SassC::Script::Value::Number
         return argument
       end
 
@@ -255,7 +255,7 @@ module SassC
                          when 'string'
                            SassC::Script::Value::String
                          when 'number'
-                           Sass::Script::Value::Number
+                           SassC::Script::Value::Number
                          when 'color'
                            SassC::Script::Value::Color
                          when 'map'
@@ -288,7 +288,7 @@ module SassC
 
       def returns_sass_list
         numbers = [10, 20, 30].map do |n|
-          Sass::Script::Value::Number.new(n, '')
+          SassC::Script::Value::Number.new(n, '')
         end
 
         Sass::Script::Value::List.new(numbers, separator: :space)

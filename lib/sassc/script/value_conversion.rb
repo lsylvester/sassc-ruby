@@ -19,7 +19,7 @@ module SassC
         when :sass_number
           value = Native.number_get_value(native_value)
           unit = Native.number_get_unit(native_value)
-          argument = Sass::Script::Value::Number.new(value, unit)
+          argument = SassC::Script::Value::Number.new(value, unit)
 
           argument
         when :sass_color
