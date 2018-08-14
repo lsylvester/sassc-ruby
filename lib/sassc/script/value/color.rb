@@ -25,7 +25,7 @@ module SassC::Script::Value
       rgba
     end
 
-    ALTERNATE_COLOR_NAMES = Sass::Util.map_vals(
+    ALTERNATE_COLOR_NAMES = SassC::Util.map_vals(
       {
         'aqua'                 => 0x00FFFFFF,
         'darkgrey'             => 0xA9A9A9FF,
@@ -39,7 +39,7 @@ module SassC::Script::Value
       }, &method(:int_to_rgba))
 
     # A hash from color names to `[red, green, blue]` value arrays.
-    COLOR_NAMES = Sass::Util.map_vals(
+    COLOR_NAMES = SassC::Util.map_vals(
       {
         'aliceblue'            => 0xF0F8FFFF,
         'antiquewhite'         => 0xFAEBD7FF,
@@ -234,7 +234,7 @@ module SassC::Script::Value
           raise ArgumentError.new("Color.new(array) expects a three- or four-element array")
         end
 
-        red, green, blue = attrs[0...3].map {|c| Sass::Util.round(c)}
+        red, green, blue = attrs[0...3].map {|c| SassC::Util.round(c)}
         @attrs = {:red => red, :green => green, :blue => blue}
         @attrs[:alpha] = attrs[3] ? attrs[3].to_f : 1
         @representation = representation
@@ -260,15 +260,15 @@ module SassC::Script::Value
 
       [:red, :green, :blue].each do |k|
         next if @attrs[k].nil?
-        @attrs[k] = Sass::Util.restrict(Sass::Util.round(@attrs[k]), 0..255)
+        @attrs[k] = SassC::Util.restrict(SassC::Util.round(@attrs[k]), 0..255)
       end
 
       [:saturation, :lightness].each do |k|
         next if @attrs[k].nil?
-        @attrs[k] = Sass::Util.restrict(@attrs[k], 0..100)
+        @attrs[k] = SassC::Util.restrict(@attrs[k], 0..100)
       end
 
-      @attrs[:alpha] = Sass::Util.restrict(@attrs[:alpha], 0..1)
+      @attrs[:alpha] = SassC::Util.restrict(@attrs[:alpha], 0..1)
     end
 
     # Create a new color from a valid CSS hex string.
@@ -655,7 +655,7 @@ module SassC::Script::Value
         hue_to_rgb(m1, m2, h + 1.0 / 3),
         hue_to_rgb(m1, m2, h),
         hue_to_rgb(m1, m2, h - 1.0 / 3)
-      ].map {|c| Sass::Util.round(c * 0xff)}
+      ].map {|c| SassC::Util.round(c * 0xff)}
     end
 
     def hue_to_rgb(m1, m2, h)

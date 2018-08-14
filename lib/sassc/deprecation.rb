@@ -49,7 +49,7 @@ module SassC
       location << ", column #{column}" if column
       location << " of #{filename}" if filename
 
-      Sass::Util.sass_warn("DEPRECATION WARNING on #{location}:\n#{message}")
+      SassC::Util.sass_warn("DEPRECATION WARNING on #{location}:\n#{message}")
     end
   end
 end

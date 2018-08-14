@@ -223,7 +223,7 @@ MSG
     #   always emitted unquoted.
     # @return [String]
     def to_s(opts = {})
-      Sass::Util.abstract(self)
+      SassC::Util.abstract(self)
     end
     alias_method :to_sass, :to_s
 

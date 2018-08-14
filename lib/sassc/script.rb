@@ -27,7 +27,7 @@ module Sass
   end
 end
 
-require 'sass/util'
+require 'sassc/util'
 
 require 'sassc/deprecation'
 

@@ -8,7 +8,7 @@ require 'uri'
 require 'thread'
 require 'pathname'
 
-module Sass
+module SassC
   # A module containing various useful functions.
   module Util
     extend self
@@ -446,7 +446,7 @@ module Sass
       obj_class = obj.is_a?(Class) ? "#{obj}." : "#{obj.class}#"
       full_message = "DEPRECATION WARNING: #{obj_class}#{caller_info[2]} " +
         "will be removed in a future version of Sass.#{("\n" + message) if message}"
-      Sass::Util.sass_warn full_message
+      SassC::Util.sass_warn full_message
     end
 
     # Silences all Sass warnings within a block.
