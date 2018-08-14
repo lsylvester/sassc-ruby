@@ -1,4 +1,4 @@
-module Sass
+module SassC
   # A deprecation warning that should only be printed once for a given line in a
   # given file.
   #

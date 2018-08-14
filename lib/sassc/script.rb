@@ -29,10 +29,7 @@ end
 
 require 'sass/util'
 
-begin
-  require 'sass/deprecation'
-rescue LoadError
-end
+require 'sassc/deprecation'
 
 require 'sassc/script/value/base'
 require 'sassc/script/value/string'
