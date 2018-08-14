@@ -62,7 +62,6 @@ module Sass
       # We don't delegate to map_hash for performance here
       # because map_hash does more than is necessary.
       rv = hash.class.new
-      hash = hash.as_stored if hash.is_a?(NormalizedMap)
       hash.each do |k, v|
         rv[k] = yield(v)
       end
@@ -88,7 +87,6 @@ module Sass
       rv = hash.class.new
       hash.each do |k, v|
         new_key, new_value = yield(k, v)
-        new_key = hash.denormalize(new_key) if hash.is_a?(NormalizedMap) && new_key == k
         rv[new_key] = new_value
       end
       rv
@@ -1080,5 +1078,3 @@ module Sass
     singleton_methods.each {|method| module_function method}
   end
 end
-
-require 'sass/util/normalized_map'
