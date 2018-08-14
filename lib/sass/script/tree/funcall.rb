@@ -1,4 +1,3 @@
-require 'sass/script/functions'
 require 'sass/util'
 
 module Sass::Script::Tree
