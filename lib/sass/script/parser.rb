@@ -1,5 +1,3 @@
-require 'sass/script/lexer'
-
 module Sass
   module Script
     # The parser for SassScript.
