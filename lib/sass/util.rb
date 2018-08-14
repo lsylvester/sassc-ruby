@@ -8,9 +8,6 @@ require 'uri'
 require 'thread'
 require 'pathname'
 
-require 'sass/root'
-require 'sass/util/subset_map'
-
 module Sass
   # A module containing various useful functions.
   module Util
