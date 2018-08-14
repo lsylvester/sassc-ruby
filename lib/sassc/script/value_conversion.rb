@@ -48,7 +48,7 @@ module SassC
             from_native(native_item, options)
           end
 
-          Sass::Script::Value::List.new(items, separator: :space)
+          SassC::Script::Value::List.new(items, separator: :space)
         else
           raise UnsupportedValue.new("Sass argument of type #{value_tag} unsupported")
         end

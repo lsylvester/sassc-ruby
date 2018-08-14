@@ -269,7 +269,7 @@ module SassC
       end
 
       def inspect_list(argument)
-        raise StandardError.new "passed value is not a Sass::Script::Value::List" unless argument.is_a? Sass::Script::Value::List
+        raise StandardError.new "passed value is not a SassC::Script::Value::List" unless argument.is_a? SassC::Script::Value::List
         return argument
       end
 
@@ -291,7 +291,7 @@ module SassC
           SassC::Script::Value::Number.new(n, '')
         end
 
-        Sass::Script::Value::List.new(numbers, separator: :space)
+        SassC::Script::Value::List.new(numbers, separator: :space)
       end
 
       module Compass

@@ -240,7 +240,7 @@ MSG
     # @param contents [Array<Value>] The contents of the new list.
     # @param separator [Symbol] The separator of the new list. Defaults to \{#separator}.
     # @param bracketed [Boolean] Whether the new list is bracketed. Defaults to \{#bracketed}.
-    # @return [Sass::Script::Value::List]
+    # @return [SassC::Script::Value::List]
     def with_contents(contents, separator: self.separator, bracketed: self.bracketed)
       Sass::Script::Value::List.new(contents, separator: separator, bracketed: bracketed)
     end

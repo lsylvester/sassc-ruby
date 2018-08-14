@@ -1,7 +1,7 @@
-module Sass::Script::Value
+module SassC::Script::Value
   # A SassScript object representing a CSS list.
   # This includes both comma-separated lists and space-separated lists.
-  class List < Base
+  class List < Sass::Script::Value::Base
     # The Ruby array containing the contents of the list.
     #
     # @return [Array<Value>]
@@ -97,7 +97,7 @@ module Sass::Script::Value
     #
     # @private
     #
-    # @param list [Sass::Script::Value::List] The list for which the index should be checked.
+    # @param list [SassC::Script::Value::List] The list for which the index should be checked.
     # @param n [SassC::Script::Value::Number] The index being checked.
     def self.assert_valid_index(list, n)
       if !n.int? || n.to_i == 0
