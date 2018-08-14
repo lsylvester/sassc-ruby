@@ -1,6 +1,6 @@
 require_relative "test_helper"
 require "stringio"
-require "sass/script"
+require "sass/script/value"
 
 module SassC
   class FunctionsTest < MiniTest::Test
