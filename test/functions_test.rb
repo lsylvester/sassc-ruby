@@ -291,11 +291,7 @@ module SassC
           Sass::Script::Value::Number.new(n, '')
         end
 
-        if Gem.loaded_specs['sass'].version < Gem::Version.create('3.5')
-          Sass::Script::Value::List.new(numbers, :space)
-        else
-          Sass::Script::Value::List.new(numbers, separator: :space)
-        end
+        Sass::Script::Value::List.new(numbers, separator: :space)
       end
 
       module Compass

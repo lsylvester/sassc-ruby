@@ -14,7 +14,7 @@ module SassC
         when :sass_boolean
           value = Native.boolean_get_value(native_value)
           argument = Script::Bool.new(value)
-          
+
           argument
         when :sass_number
           value = Native.number_get_value(native_value)
@@ -48,11 +48,7 @@ module SassC
             from_native(native_item, options)
           end
 
-          if Gem.loaded_specs['sass'].version < Gem::Version.create('3.5')
-            Sass::Script::Value::List.new(items, :space)
-          else
-            Sass::Script::Value::List.new(items, separator: :space)
-          end
+          Sass::Script::Value::List.new(items, separator: :space)
         else
           raise UnsupportedValue.new("Sass argument of type #{value_tag} unsupported")
         end
