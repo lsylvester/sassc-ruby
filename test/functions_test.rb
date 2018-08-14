@@ -259,7 +259,7 @@ module SassC
                          when 'color'
                            SassC::Script::Value::Color
                          when 'map'
-                           Sass::Script::Value::Map
+                           SassC::Script::Value::Map
                        end
 
           raise StandardError.new "unknown key #{key.inspect}" unless valueClass
@@ -282,7 +282,7 @@ module SassC
         value = SassC::Script::Value::Color.new(red: 0, green: 0, blue: 0)
         values = {}
         values[key] = value
-        map = Sass::Script::Value::Map.new values
+        map = SassC::Script::Value::Map.new values
         return map
       end
 

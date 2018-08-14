@@ -39,7 +39,7 @@ module SassC
             values[from_native(key, options)] = from_native(value, options)
           end
 
-          argument = Sass::Script::Value::Map.new values
+          argument = SassC::Script::Value::Map.new values
           argument
         when :sass_list
           length = Native::list_get_length(native_value)
