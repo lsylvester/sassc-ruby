@@ -1,7 +1,7 @@
 module SassC::Script::Value
   # A SassScript object representing a CSS list.
   # This includes both comma-separated lists and space-separated lists.
-  class List < Sass::Script::Value::Base
+  class List < Base
     # The Ruby array containing the contents of the list.
     #
     # @return [Array<Value>]

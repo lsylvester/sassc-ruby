@@ -1,4 +1,4 @@
-module Sass::Script::Value
+module SassC::Script::Value
   # The abstract superclass for SassScript objects.
   #
   # Many of these methods, especially the ones that correspond to SassScript operations,
@@ -242,7 +242,7 @@ MSG
     # @param bracketed [Boolean] Whether the new list is bracketed. Defaults to \{#bracketed}.
     # @return [SassC::Script::Value::List]
     def with_contents(contents, separator: self.separator, bracketed: self.bracketed)
-      Sass::Script::Value::List.new(contents, separator: separator, bracketed: bracketed)
+      SassC::Script::Value::List.new(contents, separator: separator, bracketed: bracketed)
     end
 
     protected

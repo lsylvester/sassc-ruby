@@ -13,7 +13,7 @@ module SassC::Script::Value
   # It's always stored, as 1 if nothing else is specified.
   # If only the alpha channel is modified using \{#with},
   # the cached RGB and HSL values are retained.
-  class Color < Sass::Script::Value::Base
+  class Color < Base
     # @private
     #
     # Convert a ruby integer to a rgba components

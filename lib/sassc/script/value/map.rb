@@ -1,7 +1,7 @@
 module SassC::Script::Value
   # A SassScript object representing a map from keys to values. Both keys and
   # values can be any SassScript object.
-  class Map < Sass::Script::Value::Base
+  class Map < Base
     # The Ruby hash containing the contents of this map.
     #
     # @return [Hash<Node, Node>]

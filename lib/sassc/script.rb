@@ -34,7 +34,7 @@ begin
 rescue LoadError
 end
 
-require 'sass/script/value/base'
+require 'sassc/script/value/base'
 require 'sassc/script/value/string'
 require 'sassc/script/value/color'
 require 'sassc/script/value/bool'

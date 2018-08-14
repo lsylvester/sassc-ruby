@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 module SassC::Script::Value
   # A SassScript object representing a CSS string *or* a CSS identifier.
-  class String < Sass::Script::Value::Base
+  class String < Base
     @@interpolation_deprecation = Sass::Deprecation.new
 
     # The Ruby value of the string.

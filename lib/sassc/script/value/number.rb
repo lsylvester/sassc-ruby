@@ -7,7 +7,7 @@ module SassC::Script::Value
   #
   # Numbers can also have more complex units, such as `1px*em/in`.
   # These cannot be inputted directly in Sass code at the moment.
-  class Number < Sass::Script::Value::Base
+  class Number < Base
     # The Ruby value of the number.
     #
     # @return [Numeric]
