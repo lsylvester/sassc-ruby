@@ -1,4 +1,4 @@
-module Sass::Script::Value
+module SassC::Script::Value
   # A SassScript object representing a CSS color.
   #
   # A color may be represented internally as RGBA, HSLA, or both.
@@ -13,7 +13,7 @@ module Sass::Script::Value
   # It's always stored, as 1 if nothing else is specified.
   # If only the alpha channel is modified using \{#with},
   # the cached RGB and HSL values are retained.
-  class Color < Base
+  class Color < Sass::Script::Value::Base
     # @private
     #
     # Convert a ruby integer to a rgba components
@@ -460,7 +460,7 @@ module Sass::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def plus(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(Sass::Script::Value::Color)
+      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :+)
       else
         super
@@ -483,7 +483,7 @@ module Sass::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def minus(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(Sass::Script::Value::Color)
+      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :-)
       else
         super
@@ -503,7 +503,7 @@ module Sass::Script::Value
     # @return [Color] The resulting color
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def times(other)
-      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(Sass::Script::Value::Color)
+      if other.is_a?(Sass::Script::Value::Number) || other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :*)
       else
         raise NoMethodError.new(nil, :times)
@@ -527,7 +527,7 @@ module Sass::Script::Value
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def div(other)
       if other.is_a?(Sass::Script::Value::Number) ||
-          other.is_a?(Sass::Script::Value::Color)
+          other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :/)
       else
         super
@@ -548,7 +548,7 @@ module Sass::Script::Value
     # @raise [Sass::SyntaxError] if `other` is a number with units
     def mod(other)
       if other.is_a?(Sass::Script::Value::Number) ||
-          other.is_a?(Sass::Script::Value::Color)
+          other.is_a?(SassC::Script::Value::Color)
         piecewise(other, :%)
       else
         raise NoMethodError.new(nil, :mod)
@@ -567,7 +567,7 @@ module Sass::Script::Value
       # IE10 doesn't properly support the color name "transparent", so we emit
       # generated transparent colors as rgba(0, 0, 0, 0) in favor of that. See
       # #1782.
-      return rgba_str if Number.basically_equal?(alpha, 0)
+      return rgba_str if Sass::Script::Value::Number.basically_equal?(alpha, 0)
       return name if name
       alpha? ? rgba_str : hex_str
     end

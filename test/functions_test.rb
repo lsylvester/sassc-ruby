@@ -257,7 +257,7 @@ module SassC
                          when 'number'
                            Sass::Script::Value::Number
                          when 'color'
-                           Sass::Script::Value::Color
+                           SassC::Script::Value::Color
                          when 'map'
                            Sass::Script::Value::Map
                        end
@@ -274,12 +274,12 @@ module SassC
       end
 
       def returns_sass_value
-        return Sass::Script::Value::Color.new(red: 0, green: 0, blue: 0)
+        return SassC::Script::Value::Color.new(red: 0, green: 0, blue: 0)
       end
 
       def returns_sass_map
         key = Script::String.new("color", "string")
-        value = Sass::Script::Value::Color.new(red: 0, green: 0, blue: 0)
+        value = SassC::Script::Value::Color.new(red: 0, green: 0, blue: 0)
         values = {}
         values[key] = value
         map = Sass::Script::Value::Map.new values
